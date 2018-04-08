@@ -26,7 +26,7 @@ def prompt_on_image(txt):
 # calculate speed from pixels and time
 def get_speed(pixels, ftperpixel, secs):
     if secs > 0.0:
-        return ((pixels * ftperpixel)/ secs) * 0.681818  
+        return ((pixels * ftperpixel)/ secs) * 0.036 
     else:
         return 0.0
  
@@ -64,9 +64,9 @@ def draw_rectangle(event,x,y,flags,param):
         cv2.rectangle(image,(ix,iy),(fx,fy),(0,255,0),2)
         
 # define some constants
-DISTANCE = 76  #<---- enter your distance-to-road value here
+DISTANCE = 12  #<---- enter your distance-to-road value here
 MIN_SPEED = 0  #<---- enter the minimum speed for saving images
-SAVE_CSV = False  #<---- record the results in .csv format in carspeed_(date).csv
+SAVE_CSV = True  #<---- record the results in .csv format in carspeed_(date).csv
 
 THRESHOLD = 15
 MIN_AREA = 175
@@ -75,7 +75,7 @@ IMAGEWIDTH = 640
 IMAGEHEIGHT = 480
 
 FOV = 53.5    #<---- Field of view
-FPS = 60
+FPS = 30
 SHOW_BOUNDS = True
 SHOW_IMAGE = True
 
@@ -90,7 +90,7 @@ RIGHT_TO_LEFT = 2
 # calculate the the width of the image at the distance specified
 frame_width_ft = 2*(math.tan(math.radians(FOV*0.5))*DISTANCE)
 ftperpixel = frame_width_ft / float(IMAGEWIDTH)
-print("Image width in feet {} at {} from camera".format("%.0f" % frame_width_ft,"%.0f" % DISTANCE))
+print("Image width in feet {} at {} from camera".format("%.3f" % frame_width_ft,"%.3f" % DISTANCE))
 
 # state maintains the state of the speed computation process
 # if starts as WAITING
@@ -125,10 +125,10 @@ text_on_image = 'No cars'
 prompt = ''
 
 # initialize the camera. Adjust vflip and hflip to reflect your camera's orientation
-camera = cv2.VideoCapture(0)
-camera.set(cv2.CAP_PROP_FPS, FPS)
-camera.set(cv2.CAP_PROP_FRAME_WIDTH, IMAGEWIDTH)
-camera.set(cv2.CAP_PROP_FRAME_HEIGHT, IMAGEHEIGHT)
+camera = cv2.VideoCapture(1)
+#camera.set(cv2.CAP_PROP_FPS, FPS)
+#camera.set(cv2.CAP_PROP_FRAME_WIDTH, IMAGEWIDTH)
+#camera.set(cv2.CAP_PROP_FRAME_HEIGHT, IMAGEHEIGHT)
 #camera.vflip = True
 #camera.hflip = True
 
@@ -214,7 +214,10 @@ while True:
     ret, img = camera.read()
     #initialize the timestamp
     timestamp = datetime.datetime.now()
- 
+  #  gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # Display the resulting frame
+   # cv2.imshow('frame',img)
     # grab the raw NumPy array representing the image 
     image = img
  
@@ -308,10 +311,10 @@ while True:
                         cv2.putText(image, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
                             (10, image.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 1)
                         # write the speed: first get the size of the text
-                        size, base = cv2.getTextSize( "%.0f mph" % last_mph, cv2.FONT_HERSHEY_SIMPLEX, 2, 3)
+                        size, base = cv2.getTextSize( "%.3f km/hr" % (last_mph), cv2.FONT_HERSHEY_SIMPLEX, 2, 3)
                         # then center it horizontally on the image
                         cntr_x = int((IMAGEWIDTH - size[0]) / 2) 
-                        cv2.putText(image, "%.0f mph" % last_mph,
+                        cv2.putText(image, "%.3f km/hr" % (last_mph),
                             (cntr_x , int(IMAGEHEIGHT * 0.2)), cv2.FONT_HERSHEY_SIMPLEX, 2.00, (0, 255, 0), 3)
                         # and save the image to disk
                         imageFilename = "car_at_" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".jpg"
