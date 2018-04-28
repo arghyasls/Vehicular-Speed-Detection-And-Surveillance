@@ -14,3 +14,4 @@ many experiments and proven to have achieved a satisfactory performance.
 KEYWORDS
 Arduino, Computer Vision, Motion detection, Speed detection, Traffic Violation.
 
+![alt text](https://github.com/arghyasls/Vehicular-Speed-Detection-And-Surveillance/blob/master/IMG_20180418_203322060.jpg)
