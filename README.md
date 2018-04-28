@@ -1,9 +1,4 @@
-Vehicular Speed Detection and Surveillance
-Project submitted under Product Development Lab (2017-18)
-Arghya Mazumdar
-(Roll #115CS0580)
-Under the guidance of
-Prof. Pabitra Mohan Khilar
+
 
 VEHICULAR SPEED DETECTION AND SURVEILLANCE
 ABSTRACT
